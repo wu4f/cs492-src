@@ -4,19 +4,20 @@ MAINTAINER Michael Macnair
 # SSHd
 #############
 
-RUN apt-get update && apt-get install -y openssh-server
-RUN mkdir /var/run/sshd
+#RUN apt-get update && apt-get install -y openssh-server
+RUN apt-get update
+#RUN mkdir /var/run/sshd
 
 # SSH login fix. Otherwise user is kicked off after login
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-ENV NOTVISIBLE "in users profile"
-RUN echo "export VISIBLE=now" >> /etc/profile
+#RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+#
+#ENV NOTVISIBLE "in users profile"
+#RUN echo "export VISIBLE=now" >> /etc/profile
 
 # Users
 ##############
 # Root's password is root, but we don't need to enable remote login as root
-RUN echo 'root:root' | chpasswd
+#RUN echo 'root:root' | chpasswd
 #RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 RUN useradd --create-home --shell /bin/bash fuzzer
@@ -50,7 +51,8 @@ RUN curl http://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz | tar xz
 ##############
 USER fuzzer
 WORKDIR /home/fuzzer
-RUN git clone https://github.com/ThalesIgnite/afl-training.git
+RUN git clone https://bitbucket.org/wuchangfeng/cs492.git
+#RUN git clone https://github.com/ThalesIgnite/afl-training.git
 # Use this if building using a local copy of the training materials
 # ADD afl-training ./afl-training
 # USER root
@@ -58,6 +60,6 @@ RUN git clone https://github.com/ThalesIgnite/afl-training.git
 
 # sshd mode
 ###############
-USER root
-EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+#USER root
+#EXPOSE 22
+#CMD ["/usr/sbin/sshd", "-D"]

@@ -30,10 +30,17 @@ int main(int argc, char *argv[])
 		} else {
 			fprintf(stderr, "head input was too small\n");
 		}
-	} else if (strcmp(input, "surprise!\n") == 0) {
-		// easter egg!
-		*(char *)1=2;
-	} else {
+	} else if (input[0] == 's')
+                if (input[1] == 'u')
+                  if (input[2] == 'r')
+                    if (input[3] == 'p')
+            /*          if (input[4] == 'r')
+                        if (input[5] == 'i')
+                          if (input[6] == 's')
+                            if (input[7] == 'e')*/
+                               // easter egg!
+                               *(char *)1=2;
+	else {
 		fprintf(stderr, "Usage: %s\nText utility - accepts commands on stdin and prints results to stdout:\n", argv[0]);
 		fprintf(stderr, "\tInput           | Output\n");
 		fprintf(stderr, "\t----------------+-----------------------\n");
