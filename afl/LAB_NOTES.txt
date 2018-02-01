@@ -1,0 +1,64 @@
+Lab #1
+------
+Bring up Ubuntu 16.04 on a 4 vCPU machine with 15GB memory
+Run...
+  sudo apt-get update
+  sudo apt-get install -y build-essential clang gcc gdb afl gcc-multilib
+
+  sudo su
+  echo core >/proc/sys/kernel/core_pattern
+  exit
+
+  wget http://thefengs.com/wuchang/courses/cs492/fuzz/program.c
+  afl-clang-fast -o program program.c
+  # afl-gcc -m32 -o program program.c
+  echo hi | ./program
+  #AFL_USE_ASAN=1 afl-gcc -m32 -o program program.c
+  AFL_USE_ASAN=1 afl-clang-fast -o program program.c
+  echo hi | ./program
+    What is the type of the offending operation?
+    What size of the offending write?
+    Which area of memory does the error occur in?
+    Show the source line in program.c where the error occurs.
+    Show the source line to fix the error
+    Recompile and run again
+
+
+Lab #2
+------
+  resize window to have at least 80x25 dimensions
+  wget http://thefengs.com/wuchang/courses/cs492/fuzz/program_deadbeef.c
+  mkdir in out
+  afl-clang-fast -o program_deadbeef program_deadbeef.c
+  echo 'h' > in/foo
+
+  # SINGLE CPU
+  #   Let run for 30 minutes on a micro instance
+  #   Perform a hexdump on crashing input (out/crashes/id*)
+  afl-fuzz -m 2G -i in -o out -- ./program_deadbeef
+
+  # 4 CPUs in parallel
+  #   Let run for 5 minutes on a 4 vCPU
+  #   Perform a hexdump on crashing input (sync_dir/*/crashes/id*)
+  mkdir sync_dir
+  tmux
+  # Then do... <Control-b>+c three times to create three more windows
+  # To switch between windows <Control-b> n or <Control-b> p
+  afl-fuzz -m 2G -i in -o sync_dir -M fuzzer01 -- ./program_deadbeef
+  <Control-b> n
+  afl-fuzz -m 2G -i in -o sync_dir -S fuzzer02 -- ./program_deadbeef
+  <Control-b> n
+  afl-fuzz -m 2G -i in -o sync_dir -S fuzzer03 -- ./program_deadbeef
+  <Control-b> n
+  afl-fuzz -m 2G -i in -o sync_dir -S fuzzer04 -- ./program_deadbeef
+
+
+Lab #3
+------
+  wget http://thefengs.com/wuchang/courses/cs492/fuzz/program_vuln.c
+  afl-clang-fast -o program_vuln program_vuln.c
+  afl-fuzz -i in -o out -- ./program_vuln
+
+  # Show the crashing input found
+  # Repeat fuzz and show the crashing input found
+  # Why might they be different patterns and lengths?

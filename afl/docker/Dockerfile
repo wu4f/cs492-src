@@ -51,7 +51,7 @@ RUN curl http://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz | tar xz
 ##############
 USER fuzzer
 WORKDIR /home/fuzzer
-RUN git clone https://bitbucket.org/wuchangfeng/cs492.git
+RUN git clone https://bitbucket.org/wuchangfeng/cs492-src.git
 #RUN git clone https://github.com/ThalesIgnite/afl-training.git
 # Use this if building using a local copy of the training materials
 # ADD afl-training ./afl-training
