@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 void unsafe_input() {
-    char buf[16];
+    char buf[2];
     int i;
     i = scanf("%s",buf);
     printf("%s\n",buf);
