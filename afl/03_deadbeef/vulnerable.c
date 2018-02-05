@@ -1,15 +1,18 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 int main(int argc, char **argv) {
 
         char ptr[20];
+        char* p;
+
         if(argc>1){
                 FILE *fp = fopen(argv[1], "r");
-                fgets(ptr, sizeof(ptr), fp);
+                p = fgets(ptr, sizeof(ptr), fp);
         }
         else{
-                fgets(ptr, sizeof(ptr), stdin);
+                p = fgets(ptr, sizeof(ptr), stdin);
         }
         printf("%s", ptr);
         if(ptr[0] == 'd') {
@@ -37,5 +40,7 @@ int main(int argc, char **argv) {
                 else    printf("%c",ptr[1]);
         }
         else    printf("%c",ptr[0]);
+        if (strcmp(ptr,"foob") == 0 )
+              abort();
         return 0;
 }

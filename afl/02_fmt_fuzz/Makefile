@@ -4,7 +4,10 @@ CFLAGS ?= -g -w
 all:	vulnerable
 
 clean:
-	rm -f vulnerable
+	rm -rf vulnerable outputs
 
 vulnerable: vulnerable.c
-	${CC} ${CFLAGS} vulnerable.c -o vulnerable
+	~/afl/afl-gcc -Wno-format -m32 -o vulnerable vulnerable.c
+
+fuzz: vulnerable
+	~/afl/afl-fuzz -i inputs -o outputs -- ./vulnerable

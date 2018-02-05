@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 void unsafe_input() {
-    char buf[6];
+    char buf[16];
     int i;
-    i = scanf("%6s",buf);
+    i = scanf("%s",buf);
     printf("%s\n",buf);
 }
 int main () {
