@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	if (read(STDIN_FILENO, input, 100) < 0) {
 		fprintf(stderr, "Couldn't read stdin.\n");
 	}
-	if(input[0] == 'c') { 
+	if(input[0] == 'c') {
 		// count characters
 		out = malloc(sizeof(input) - 1 + 3); // enough space for 2 digits + a space + input-1 chars
 		sprintf(out, "%lu ", strlen(input) - 1);
@@ -30,16 +30,7 @@ int main(int argc, char *argv[])
 		} else {
 			fprintf(stderr, "head input was too small\n");
 		}
-	} else if (input[0] == 's')
-                if (input[1] == 'u')
-                  if (input[2] == 'r')
-                    if (input[3] == 'p')
-            /*          if (input[4] == 'r')
-                        if (input[5] == 'i')
-                          if (input[6] == 's')
-                            if (input[7] == 'e')*/
-                               // easter egg!
-                               *(char *)1=2;
+	}
 	else {
 		fprintf(stderr, "Usage: %s\nText utility - accepts commands on stdin and prints results to stdout:\n", argv[0]);
 		fprintf(stderr, "\tInput           | Output\n");
