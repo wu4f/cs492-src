@@ -28,7 +28,7 @@ RUN echo "fuzzer:`cat password.txt`" | chpasswd && rm password.txt
 # AFL + Deps
 ##############
 USER root
-RUN apt-get update && apt-get install -y clang llvm-dev git build-essential curl vim nano libssl-dev screen cgroup-bin sudo gcc-multilib gcc gdb afl
+RUN apt-get update && apt-get install -y clang llvm-dev git build-essential curl vim nano libssl-dev screen cgroup-bin sudo gcc-multilib gcc gdb
 
 RUN update-alternatives --install /usr/bin/clang clang `which clang-3.8` 1
 RUN update-alternatives --install /usr/bin/clang++ clang++ `which clang++-3.8` 1
