@@ -1,25 +1,21 @@
 FROM ubuntu:16.04
 MAINTAINER Michael Macnair
 
-# SSHd
+# sshd mode setup
 #############
-
 #RUN apt-get update && apt-get install -y openssh-server
-RUN apt-get update
 #RUN mkdir /var/run/sshd
-
 # SSH login fix. Otherwise user is kicked off after login
 #RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 #
 #ENV NOTVISIBLE "in users profile"
 #RUN echo "export VISIBLE=now" >> /etc/profile
-
-# Users
-##############
 # Root's password is root, but we don't need to enable remote login as root
 #RUN echo 'root:root' | chpasswd
 #RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
+# Users
+##############
 RUN useradd --create-home --shell /bin/bash fuzzer
 # See the README - this password is visible to anyone with access to the image
 COPY password.txt .
@@ -29,35 +25,27 @@ RUN echo "fuzzer:`cat password.txt`" | chpasswd && rm password.txt
 ##############
 USER root
 RUN apt-get update && apt-get install -y clang llvm-dev git build-essential curl vim nano libssl-dev screen cgroup-bin sudo gcc-multilib gcc gdb tmux
-
 RUN update-alternatives --install /usr/bin/clang clang `which clang-3.8` 1
 RUN update-alternatives --install /usr/bin/clang++ clang++ `which clang++-3.8` 1
 RUN update-alternatives --install /usr/bin/llvm-config llvm-config `which llvm-config-3.8` 1
 RUN update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer `which llvm-symbolizer-3.8` 1
 
-# For the date exercise:
-RUN apt-get install -y autopoint bison gperf autoconf texinfo gettext
-
 # For sudo for ASAN:
 RUN usermod -aG sudo fuzzer
-
 USER fuzzer
 WORKDIR /home/fuzzer
 RUN curl http://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz | tar xz
-
-# You could install gnuplot-nox, but it increases the image size a lot (~100 extra packages).
-# Students can install it themselves if they want it.
 
 # Exercises
 ##############
 USER fuzzer
 WORKDIR /home/fuzzer
 RUN git clone https://bitbucket.org/wuchangfeng/cs492-src.git
-#RUN git clone https://github.com/ThalesIgnite/afl-training.git
-# Use this if building using a local copy of the training materials
-# ADD afl-training ./afl-training
+
+# Use this if building using a local copy
+# ADD cs492-src ./cs492-src
 # USER root
-# RUN chown -R fuzzer:fuzzer afl-training
+# RUN chown -R fuzzer:fuzzer cs492-src
 
 # sshd mode
 ###############
