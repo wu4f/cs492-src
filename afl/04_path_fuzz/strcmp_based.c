@@ -16,7 +16,5 @@ int main(int argc, char **argv) {
         }
         if (strcmp(ptr,"deadbeef") == 0 )
               abort();
-	else
-              printf("%s", ptr);
         return 0;
 }
