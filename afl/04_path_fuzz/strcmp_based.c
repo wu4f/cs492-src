@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
         else{
                 p = fgets(ptr, sizeof(ptr), stdin);
         }
-        if (strcmp(ptr,"foob") == 0 )
+        if (strcmp(ptr,"deadbeef") == 0 )
               abort();
 	else
               printf("%s", ptr);
