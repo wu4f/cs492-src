@@ -1,78 +1,47 @@
-These instructions lead you through setup and fuzzing of a sample program.
+# Fuzzing with AFL workshop
+Materials of the "Fuzzing with AFL" workshop by Michael Macnair (@michael_macnair).
 
-Setup
-========
+The first public version of this workshop was presented at [SteelCon 2017](https://www.steelcon.info/the-event/workshops/#FWA).
 
-Jump to the appropriate part of this Setup section based on what you're
-configuring, then go to the next section (Building AFL).
+# Pre-requisites
+- 3-4 hours (more to complete all the challenges)
+- Linux machine
+- Basic C and command line experience - ability to modify and compile C programs.
+- Docker, or the dependencies described in `quickstart`.
 
-Logging in to the provided instance
--------------------------------------
+# Contents
+- quickstart - Do this first! A tiny sample program to get started with fuzzing, including instructions on how to setup your machine.
+- harness - the basics of creating a test harness. Do this if you have any doubts about the "plumbing" between afl-fuzz and the target code.
+- challenges - a set of known-vulnerable programs with fuzzing hints
+- docker - Instructions and Dockerfile for preparing a suitable environment, and hosting it on AWS if you wish.
 
-If you're reading these instructions then you've probably already made it! Skip to the Building AFL section.
+See the other READMEs for more information.
 
-Running the docker image locally
------------------------------------
+# Challenges
 
-See the "Running locally" section of docker/README.md, then skip to the Building AFL section.
+Challenges, roughly in recommended order, with any specific aspects they cover:
+- sendmail/1301 - parallel fuzzing
+- heartbleed - fuzzing with ASAN
+- date - fuzzing environment variable input
+- ntpq - fuzzing a network client; coverage analysis and increasing coverage
+- cyber-grand-challenge - an easy vuln and an example of a hard to find vuln using afl
+- sendmail/1305 - persistent mode difficulties
 
-Setting up your own machine manually
----------------------------------------
+The challenges have HINTS.md and ANSWERS.md files - these contain useful information about fuzzing different targets even if you're not going to attempt the challenge.
 
-Install dependencies:
+All of the challenges use real vulnerabilities from open source projects (the CVEs are identified in the descriptions), with the exception of the Cyber Grand Challenge extract, which is a synthetic vulnerability.
 
-    $ sudo apt-get install clang-3.8 build-essential llvm-3.8-dev gnuplot-nox
+# Slides
 
-Work around some Ubuntu annoyances
+Published via [Google docs](https://docs.google.com/presentation/d/1lTVDDGCCOU6Fbm5JAfxO963LSVvrCWnbv0TBZP5Ka0o/pub?start=false&loop=false&delayms=30000). There is extra information in the speaker notes (Options / Open speaker notes)
 
-    $ sudo update-alternatives --install /usr/bin/clang clang `which clang-3.8` 1
-    $ sudo update-alternatives --install /usr/bin/clang++ clang++ `which clang++-3.8` 1
-    $ sudo update-alternatives --install /usr/bin/llvm-config llvm-config `which llvm-config-3.8` 1
-    $ sudo update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer `which llvm-symbolizer-3.8` 1
+# Links
 
-Make system not interfere with crash detection:
+- The afl docs/ directory
+- Ben Nagy’s “Finding Bugs in OS X using AFL” [video](https://vimeo.com/129701495)
+- The [afl-users mailing list](https://groups.google.com/forum/#!forum/afl-users)
+- The smart fuzzer revolution (talk on the future of fuzzing): [video](https://www.youtube.com/watch?v=g1E2Ce5cBhI) / [slides](https://docs.google.com/presentation/d/1FgcMRv_pwgOh1yL5y4GFsl1ozFwd6PMNGlMi2ONkGec/edit#slide=id.g13a9c1bce4_6_0)
+- [libFuzzer](http://llvm.org/docs/LibFuzzer.html)
+    - [libFuzzer workshop](https://github.com/Dor1s/libfuzzer-workshop)
+    - [libFuzzer tutorial](https://github.com/google/fuzzer-test-suite/blob/master/tutorial/libFuzzerTutorial.md)
 
-    $ echo core | sudo tee /proc/sys/kernel/core_pattern
-
-Get afl:
-
-    $ cd
-    $ wget http://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz
-    $ tar xvf afl-latest.tgz
-
-Building AFL
-============
-
-    $ cd afl-2.45b   # replace with whatever the current version is
-    $ make
-    $ make -C llvm_mode
-
-
-The `vulnerable` program
-========================
-
-Build our quickstart program using the instrumented compiler:
-
-    $ cd /path/to/quickstart # (e.g. ~/afl-training/quickstart)
-    $ CC=~/afl-2.45b/afl-clang-fast AFL_HARDEN=1 make
-
-Test it:
-
-    $ ./vulnerable
-    # Press enter to get usage instructions.
-    # Test it on one of the provided inputs:
-    $ ./vulnerable < inputs/c
-
-
-Fuzzing
-=======
-
-Fuzz it:
-
-    $ ~/afl-2.45b/afl-fuzz -i inputs -o out ./vulnerable
-
-For comparison you could also test without the provided example inputs, e.g.:
-
-    $ mkdir in
-    $ echo "my seed" > in/a
-    $ ~/afl-2.45b/afl-fuzz -i in -o out ./vulnerable
