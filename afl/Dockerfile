@@ -19,7 +19,7 @@ RUN update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer `whic
 RUN usermod -aG sudo fuzzer
 USER fuzzer
 WORKDIR /home/fuzzer
-RUN curl http://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz | tar xz
+RUN curl https://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz | tar xz
 
 # Exercises
 ##############
