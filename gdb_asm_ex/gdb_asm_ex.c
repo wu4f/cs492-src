@@ -12,7 +12,7 @@ void sub() {
 int main() {
 	user_code = 0;
 
-	printf("%s %s %s",e,t,p);
+	printf("%s%s%s\n",e,t,p);
 	scanf("%d",&user_code);
 	sub();
 	if (user_code == pass_code)
