@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # Originally from Michael Macnair
 LABEL maintainer="cs492"
@@ -13,11 +13,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y clang llvm-dev git build-essen
 
 # For sudo for ASAN:
 RUN usermod -aG sudo fuzzer
-USER fuzzer
-WORKDIR /home/fuzzer
-RUN curl https://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz | tar xz
-
-# Exercises
 USER fuzzer
 WORKDIR /home/fuzzer
 COPY . cs492-afl
